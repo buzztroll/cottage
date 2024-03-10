@@ -1,0 +1,39 @@
+[project]
+name = "buzz-cottage"
+version = "0.0.1"
+
+dependencies = [
+    "Adafruit-Blinka==8.34.0",
+    "adafruit-circuitpython-busdevice==5.2.6",
+    "adafruit-circuitpython-connectionmanager==1.0.1",
+    "adafruit-circuitpython-neopixel==6.3.11",
+    "adafruit-circuitpython-pixelbuf==2.0.4",
+    "adafruit-circuitpython-requests==3.0.1",
+    "adafruit-circuitpython-typing==1.10.2",
+    "Adafruit-PlatformDetect==3.62.0",
+    "Adafruit-PureIO==1.1.11",
+    "pyserial==3.5",
+    "pyusb==1.2.1",
+    "rpi-ws281x==5.0.0",
+    "RPi.GPIO==0.7.1",
+    "sysv-ipc==1.1.0",
+    "typing_extensions==4.10.0",
+    "python-vlc==3.0.20123",
+    "gpiozero==2.0.1"
+    ]
+
+[project.scripts]
+buzz-welcome-lights = "buzz_cottage.cmd.welcome_lights:main"
+buzz-alert-lights = "buzz_cottage.cmd.alert_lights:main"
+buzz-motion = "buzz_cottage.cmd.motion:main"
+buzz-button = "buzz_cottage.cmd.button_tester:main"
+buzz-cottage = "buzz_cottage.cmd.cottage:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# If there are data files included in your packages that need to be
+# installed, specify them here.
+package-data = {"sample" = ["*.dat"]}
