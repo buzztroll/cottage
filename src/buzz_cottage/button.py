@@ -1,5 +1,6 @@
-import logging
+
 import RPi.GPIO as GPIO
+
 
 class BuzzCottageButton(object):
     STATE_OFF = 0

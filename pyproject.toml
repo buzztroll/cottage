@@ -25,8 +25,6 @@ dependencies = [
 [project.scripts]
 buzz-welcome-lights = "buzz_cottage.cmd.welcome_lights:main"
 buzz-alert-lights = "buzz_cottage.cmd.alert_lights:main"
-buzz-motion = "buzz_cottage.cmd.motion:main"
-buzz-button = "buzz_cottage.cmd.button_tester:main"
 buzz-cottage = "buzz_cottage.cmd.cottage:main"
 
 [build-system]

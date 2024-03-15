@@ -3,6 +3,9 @@ import sys
 
 import buzz_cottage.lights as lights
 
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+_g_logger = logging.getLogger(__file__)
+
 
 def main():
     w = lights.AlertLights()
@@ -10,9 +13,9 @@ def main():
         w.start()
         w.join()
         w.off()
-        logging.info("Done")
+        _g_logger.info("Done")
     except KeyboardInterrupt:
-        logging.warning("User killed")
+        _g_logger.warning("User killed")
         w.off()
         raise
 

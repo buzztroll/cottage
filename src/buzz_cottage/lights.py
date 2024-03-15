@@ -2,12 +2,10 @@ import board
 import logging
 import math
 import neopixel
-import sys
 import time
 import threading
 
-
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+_g_logger = logging.getLogger(__file__)
 
 
 class FaderLight(object):
@@ -52,7 +50,7 @@ class WelcomeLights(threading.Thread):
             red = self.red.fade_up()
             green = self.green.fade_up()
             blue = self.blue.fade_up()
-            logging.info(f"{red}, {green}, {blue}")
+            _g_logger.info(f"{red}, {green}, {blue}")
             self.pixels.fill((red, green, blue))
             self.pixels.show()
             time.sleep(self.wait_time)
@@ -62,7 +60,7 @@ class WelcomeLights(threading.Thread):
             red = self.red.fade_down()
             green = self.green.fade_down()
             blue = self.blue.fade_down()
-            logging.info(f"{red}, {green}, {blue}")
+            _g_logger.info(f"{red}, {green}, {blue}")
             self.pixels.fill((red, green, blue))
             self.pixels.show()
             time.sleep(self.wait_time)
@@ -73,13 +71,13 @@ class WelcomeLights(threading.Thread):
             self._fade_on()
             self._fade_off()
             self.off()
-            logging.info("final")
+            _g_logger.info("final")
         except KeyboardInterrupt:
-            logging.warning("Ending lights!")
+            _g_logger.warning("Ending lights!")
             self.off()
 
     def off(self):
-        logging.info("off")
+        _g_logger.info("off")
         self.pixels.fill((0, 0, 0))
         self.pixels.show()
 
@@ -118,12 +116,12 @@ class AlertLights(threading.Thread):
                 self._fade_on()
                 self._fade_off()
             self.off()
-            logging.info("final")
+            _g_logger.info("final")
         except KeyboardInterrupt:
-            logging.warning("Ending lights!")
+            _g_logger.warning("Ending lights!")
             self.off()
 
     def off(self):
-        logging.info("off")
+        _g_logger.info("off")
         self.pixels.fill((0, 0, 0))
         self.pixels.show()
