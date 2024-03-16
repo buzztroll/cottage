@@ -41,7 +41,7 @@ class _BuzzGPIOHandler(threading.Thread):
                     _g_logger.exception("handler exception")
 
     def fire_cb(self):
-        _g_logger.info(f"fire_cb for pin {self._pin} enter")
+        _g_logger.debug(f"fire_cb for pin {self._pin} enter")
         try:
             with self._cond:
                 if self.running:
@@ -89,7 +89,7 @@ class BuzzGPIODetector(threading.Thread):
         with self._cond:
             while not self._done:
                 for pin in self._handler_table:
-                    if not self._handler_table[pin].running and GPIO.input(pin):
+                    if GPIO.input(pin):
                         _g_logger.debug(f"Pin {pin} is high")
                         self._handler_table[pin].fire_cb()
                 self._cond.wait(self._frequency)
