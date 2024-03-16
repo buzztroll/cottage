@@ -17,7 +17,7 @@ _g_logger = logging.getLogger(__file__)
 
 class Cottage(object):
 
-    def __init__(self, welcome_script, alert_script, motion_pin=16, button_pin=15):
+    def __init__(self, welcome_script, alert_script, motion_pin=25, button_pin=15):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(True)
         GPIO.cleanup()
