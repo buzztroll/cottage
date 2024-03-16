@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 
 import RPi.GPIO as GPIO
 
@@ -34,6 +35,8 @@ class _BuzzGPIOHandler(threading.Thread):
                 try:
                     _g_logger.debug(f"Running the handler for pin {self._pin}")
                     self.cb(**self.cb_kwargs)
+                    while GPIO.input(self._pin) == GPIO.HIGH:
+                        time.sleep(0.01)
                 except Exception as ex:
                     _g_logger.exception("handler exception")
 

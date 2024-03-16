@@ -39,8 +39,6 @@ class Cottage(object):
     def button_pressed(self):
         _g_logger.info("Button pressed enter")
         self.button_mgr.button_pressed()
-        while GPIO.input(self.button_pin) == GPIO.HIGH:
-            time.sleep(0.01)
         self.motion_throttle.reset_fired()
         self.buzz_gpio.force_handler(self.motion_pin)
         _g_logger.info("Button pressed exit")
@@ -63,8 +61,6 @@ class Cottage(object):
                 _g_logger.info(f"Motion detected done {script}")
             except Exception as ex:
                 _g_logger.exception("failed to run")
-            while GPIO.input(self.motion_pin) == GPIO.HIGH:
-                time.sleep(0.01)
         finally:
             _g_logger.info("Motion detected exit")
 
