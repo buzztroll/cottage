@@ -89,7 +89,7 @@ class BuzzGPIODetector(threading.Thread):
         with self._cond:
             while not self._done:
                 for pin in self._handler_table:
-                    if GPIO.input(pin):
+                    if not self._handler_table[pin].running and GPIO.input(pin):
                         _g_logger.debug(f"Pin {pin} is high")
                         self._handler_table[pin].fire_cb()
                 self._cond.wait(self._frequency)
