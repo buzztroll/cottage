@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 
 _g_logger = logging.getLogger(__file__)
 
+
 class _BuzzGPIOHandler(threading.Thread):
     def __init__(self, pin, cb, cb_kwargs=None):
         super().__init__()
@@ -24,7 +25,6 @@ class _BuzzGPIOHandler(threading.Thread):
         while not self._done:
             with self._cond:
                 self.running = False
-                _g_logger.debug(f"Waiting to run the handler for pin {self._pin}")
                 while not self._fire and not self._done:
                     self._cond.wait()
                 self.running = True
@@ -38,16 +38,21 @@ class _BuzzGPIOHandler(threading.Thread):
                     _g_logger.exception("handler exception")
 
     def fire_cb(self):
-        with self._cond:
-            if self.running:
-                _g_logger.debug(f"Handler for pin {self._pin} is already running")
-                return
-            self._fire = True
-            self._cond.notify()
+        _g_logger.info(f"fire_cb for pin {self._pin} enter")
+        try:
+            with self._cond:
+                if self.running:
+                    _g_logger.debug(f"Handler for pin {self._pin} is already running")
+                    return
+                self._fire = True
+                self._cond.notifyAll()
+        finally:
+            _g_logger.debug(f"fire_cb for pin {self._pin} exit")
 
     def stop(self):
         with self._cond:
             self._done = True
+            self._fire = False
             self._cond.notify()
 
 
@@ -65,10 +70,14 @@ class BuzzGPIODetector(threading.Thread):
             self._handler_table[pin] = _handler
             _handler.start()
 
+    def force_handler(self, pin):
+        _g_logger.info(f"Force the handler for pin {pin}")
+        self._handler_table[pin].fire_cb()
+
     def stop(self):
         with self._cond:
             for pin in self._handler_table:
-                _g_logger.debug(f"Stopping pin {pin}")
+                _g_logger.info(f"Stopping pin {pin}")
                 self._handler_table[pin].stop()
             self._done = True
             self._cond.notify()
@@ -78,6 +87,7 @@ class BuzzGPIODetector(threading.Thread):
             while not self._done:
                 for pin in self._handler_table:
                     if GPIO.input(pin):
+                        _g_logger.debug(f"Pin {pin} is high")
                         self._handler_table[pin].fire_cb()
                 self._cond.wait(self._frequency)
 
@@ -86,5 +96,5 @@ class BuzzGPIODetector(threading.Thread):
             _g_logger.debug(f"Waiting for pin {pin} thread to finish")
             self._handler_table[pin].join()
             _g_logger.debug(f"Pin {pin} thread finished")
-        _g_logger.debug("Waiting for BuzzGPIODetector thread to finish")
+        _g_logger.info("Waiting for BuzzGPIODetector thread to finish")
         super().join()

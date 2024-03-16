@@ -5,6 +5,7 @@ import neopixel
 import time
 import threading
 
+
 _g_logger = logging.getLogger(__file__)
 
 
@@ -50,7 +51,7 @@ class WelcomeLights(threading.Thread):
             red = self.red.fade_up()
             green = self.green.fade_up()
             blue = self.blue.fade_up()
-            _g_logger.info(f"{red}, {green}, {blue}")
+            _g_logger.debug(f"{red}, {green}, {blue}")
             self.pixels.fill((red, green, blue))
             self.pixels.show()
             time.sleep(self.wait_time)
@@ -60,7 +61,7 @@ class WelcomeLights(threading.Thread):
             red = self.red.fade_down()
             green = self.green.fade_down()
             blue = self.blue.fade_down()
-            _g_logger.info(f"{red}, {green}, {blue}")
+            _g_logger.debug(f"{red}, {green}, {blue}")
             self.pixels.fill((red, green, blue))
             self.pixels.show()
             time.sleep(self.wait_time)

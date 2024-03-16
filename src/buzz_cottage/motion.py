@@ -5,6 +5,7 @@ import threading
 
 _g_logger = logging.getLogger(__name__)
 
+
 class BuzzEventThrottle(object):
     def __init__(self, callback, args=None, pace=60, inline=True):
         self._cb = callback
@@ -27,10 +28,9 @@ class BuzzEventThrottle(object):
                 _g_logger.debug("The event window is still open. Ignoring")
                 return
             if self._running:
-                _g_logger.debug("The event handler is already running")
+                _g_logger.info("The event handler is already running")
             self._running = True
             try:
-                self._last_fired = time.time()
                 if self._inline:
                     fire = True
                 else:
@@ -44,10 +44,12 @@ class BuzzEventThrottle(object):
         if fire:
             self._fire_cb()
 
-    def update_fired(self):
-        self._last_fired = time.time()
+    def reset_fired(self):
+        self._last_fired = 0
 
     def _fire_cb(self):
+        _g_logger.debug("Running the throttled handler")
+        self._last_fired = time.time()
         try:
             self._cb(**self._cb_args)
         finally:
