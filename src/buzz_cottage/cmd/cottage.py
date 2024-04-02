@@ -28,7 +28,7 @@ class Cottage(object):
 
         self.button_pin = button_pin
         self.motion_pin = motion_pin
-        self.motion_throttle = buzzmo.BuzzEventThrottle(self.motion_detected, pace=60)
+        self.motion_throttle = buzzmo.BuzzEventThrottle(self.motion_detected, pace=180)
         self.welcome_script = welcome_script
         self.alert_script = alert_script
         self.button_mgr = buzzbutt.BuzzCottageButton()

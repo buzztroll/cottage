@@ -11,6 +11,7 @@ class BuzzEventThrottle(object):
         self._cb = callback
         self._pace = pace
         self._last_fired = 0
+        self._last_moved = 0
         self._lock = threading.Lock()
         self._cb_thread = None
         self._running = False
@@ -24,7 +25,7 @@ class BuzzEventThrottle(object):
         fire = False
         self._lock.acquire()
         try:
-            if now - self._last_fired < self._pace:
+            if now - self._last_moved < self._pace:
                 _g_logger.debug("The event window is still open. Ignoring")
                 return
             if self._running:
@@ -40,6 +41,7 @@ class BuzzEventThrottle(object):
                 self._running = False
                 raise
         finally:
+            self._last_moved = now
             self._lock.release()
         if fire:
             self._fire_cb()
