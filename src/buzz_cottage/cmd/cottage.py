@@ -7,6 +7,7 @@ import time
 import RPi.GPIO as GPIO
 
 import buzz_cottage.motion as buzzmo
+import buzz_cottage.event as buzzevent
 import buzz_cottage.buzz_gpio as buzz_gpio
 import buzz_cottage.button as buzzbutt
 
@@ -17,7 +18,7 @@ _g_logger = logging.getLogger(__file__)
 
 class Cottage(object):
 
-    def __init__(self, welcome_script, alert_script, motion_pin=25, button_pin=15):
+    def __init__(self, welcome_dir, alert_dir, motion_pin=25, button_pin=15):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(True)
         GPIO.cleanup()
@@ -26,11 +27,12 @@ class Cottage(object):
 
         time.sleep(2)
 
+        self._welcome_event = buzzevent.EventExec(welcome_dir)
+        self._alert_event = buzzevent.EventExec(alert_dir)
+
         self.button_pin = button_pin
         self.motion_pin = motion_pin
         self.motion_throttle = buzzmo.BuzzEventThrottle(self.motion_detected, pace=180)
-        self.welcome_script = welcome_script
-        self.alert_script = alert_script
         self.button_mgr = buzzbutt.BuzzCottageButton()
         self.buzz_gpio = buzz_gpio.BuzzGPIODetector()
         self.buzz_gpio.add_handler(motion_pin, self.motion_throttle.moved)
@@ -52,9 +54,9 @@ class Cottage(object):
                 _g_logger.info("Motion detected but this is off")
                 return
             if state == buzzbutt.BuzzCottageButton.STATE_ALARM:
-                script = self.alert_script
+                script = self._alert_event.pick_one()
             else:
-                script = self.welcome_script
+                script = self._welcome_event.pick_one()
             try:
                 _g_logger.info(f"Motion detected running {script}")
                 subprocess.call(script, shell=True)
@@ -79,7 +81,7 @@ class Cottage(object):
 
 
 def main():
-    c = Cottage('/home/bresnaha/Dev/cottage/scripts/welcome.sh', '/home/bresnaha/Dev/cottage/scripts/intruder.sh')
+    c = Cottage('/home/bresnaha/Dev/cottage/scripts/welcome', '/home/bresnaha/Dev/cottage/scripts/alert')
     c.run()
     return 0
 
