@@ -15,7 +15,7 @@ def clear_lights(pixels):
     pixels.show()
 
 
-def _pulse_one_light(light, percent=.2, up=False):
+def _pulse_one_light(light, percent=.4, up=False):
     degree = light * percent
     if up:
         light = light + degree
@@ -40,8 +40,8 @@ def pulse_lights(pixels, total=50, up=False):
 
 def main():
     three_colors = [
-        (0, 50, 0),
-        (0, 150, 0),
+        (50, 150, 50),
+        (20, 75, 20),
         (0, 255, 0)
     ]
 
@@ -55,8 +55,11 @@ def main():
         if c_ndx >= len(three_colors):
             c_ndx = 0
         pixels[i] = three_colors[c_ndx]
+        print (pixels[i])
         pixels.show()
         time.sleep(0.1)
+        c_ndx = c_ndx + 1
+
 
     time.sleep(5)
 
@@ -65,6 +68,7 @@ def main():
         pulse_lights(pixels, up=up)
         up = not up
         time.sleep(0.5)
+    clear_lights(pixels)
 
     return 0
 

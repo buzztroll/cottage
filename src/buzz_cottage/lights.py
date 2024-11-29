@@ -70,6 +70,7 @@ class WelcomeLights(threading.Thread):
         try:
             self.off()
             self._fade_on()
+            time.sleep(120.0)
             self._fade_off()
             self.off()
             _g_logger.info("final")

@@ -8,7 +8,7 @@ _g_logger = logging.getLogger(__file__)
 
 
 def main():
-    w = lights.WelcomeLights(166, 172, 255, steps=90, wait_time=0.05)
+    w = lights.WelcomeLights(224, 2, 2, steps=70, wait_time=0.05)
     try:
         w.start()
         w.join()

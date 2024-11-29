@@ -26,6 +26,7 @@ dependencies = [
 buzz-welcome-lights = "buzz_cottage.cmd.welcome_lights:main"
 buzz-alert-lights = "buzz_cottage.cmd.alert_lights:main"
 buzz-cottage = "buzz_cottage.cmd.cottage:main"
+buzz-gryph = "buzz_cottage.cmd.gryph:main"
 
 [build-system]
 requires = ["setuptools"]

@@ -1,5 +1,9 @@
+import logging
 import os
 import random
+
+
+_g_logger = logging.getLogger(__file__)
 
 
 class EventExec(object):
@@ -9,12 +13,10 @@ class EventExec(object):
 
     def pick_one(self):
         file_list = []
+        _g_logger.info(f"listing {self._dir_path}")
         dir_list = os.listdir(self._dir_path)
         for i in dir_list:
+            _g_logger.info(f"found {i}")
             if i.endswith(self._suffix):
                 file_list.append(i)
-        return random.choice(file_list)
-
-
-e = EventExec("/etc", suffix="conf")
-print(e.pick_one())
+        return os.path.join(self._dir_path, random.choice(file_list))

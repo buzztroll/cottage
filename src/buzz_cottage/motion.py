@@ -47,10 +47,10 @@ class BuzzEventThrottle(object):
             self._fire_cb()
 
     def reset_fired(self):
-        self._last_fired = 0
+        self._last_moved = 0
 
     def mark_fired(self):
-        self._last_fired = time.time()
+        self._last_moved = time.time()
 
     def _fire_cb(self):
         _g_logger.debug("Running the throttled handler")
